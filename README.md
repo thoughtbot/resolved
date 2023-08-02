@@ -8,3 +8,9 @@ without a framework like Rails or Sinatra.
 ```
 bundle install
 ```
+
+## CI
+
+```
+bundle exec rake
+```
