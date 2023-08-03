@@ -14,6 +14,11 @@
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 ENV["RACK_ENV"] ||= "test"
+require "capybara/rspec"
+require_relative "./../app/app"
+
+# https://github.com/teamcapybara/capybara#setup
+Capybara.app = App.new
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

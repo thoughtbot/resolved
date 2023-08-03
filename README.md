@@ -9,6 +9,12 @@ without a framework like Rails or Sinatra.
 bundle install
 ```
 
+## Local Development
+
+```
+bin/dev
+```
+
 ## CI
 
 ```
