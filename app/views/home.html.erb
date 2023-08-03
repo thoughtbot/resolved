@@ -1,2 +1,7 @@
 <h1>Resolved</h1>
 <p>Enter a domain name</p>
+<form method="get" action="/">
+  <label for="url">Url</label>
+  <input type="url" name="url" id="url" required value="<%= @locals[:url] %>">
+  <button>Submit</button>
+</form>

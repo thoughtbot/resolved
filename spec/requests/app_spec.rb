@@ -42,4 +42,13 @@ RSpec.describe App, type: :request do
       expect(last_response.headers["Content-Type"]).to eq "text/html; charset=utf-8"
     end
   end
+
+  describe "/?url=" do
+    it "returns the correct response" do
+      get "/?url=https://example.com"
+
+      expect(last_response.status).to eq 200
+      expect(last_response.headers["Content-Type"]).to eq "text/html; charset=utf-8"
+    end
+  end
 end

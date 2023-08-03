@@ -10,7 +10,7 @@ class App
 
     case path
     when "/"
-      render("home")
+      render("home", url: req.params["url"])
     else
       handle_missing_path
     end
@@ -18,7 +18,8 @@ class App
 
   private
 
-  def render(template, status_code: 200)
+  def render(template, status_code: 200, **locals)
+    @locals = locals
     @content = render_template(template)
     body = render_template("layout")
     headers = {"Content-Type" => "text/html; charset=utf-8"}

@@ -13,4 +13,13 @@ feature "App" do
 
     expect(page).to have_content "Page not found"
   end
+
+  scenario "Filling out form" do
+    visit "/"
+
+    fill_in :url, with: "https://example.com"
+    click_button "Submit"
+
+    expect(page).to have_field("url", with: "https://example.com")
+  end
 end
