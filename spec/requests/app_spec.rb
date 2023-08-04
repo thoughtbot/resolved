@@ -45,6 +45,12 @@ RSpec.describe App, type: :request do
 
   describe "/?url=" do
     it "returns the correct response" do
+      resolver = instance_double(Resolv::DNS)
+      ns_resource = instance_double(Resolv::DNS::Resource::IN::NS)
+      allow(Resolv::DNS).to receive(:new).and_return(resolver)
+      allow(resolver).to receive(:getresources).and_return([ns_resource])
+      allow(ns_resource).to receive(:name).and_return("server.net")
+
       get "/?url=https://example.com"
 
       expect(last_response.status).to eq 200

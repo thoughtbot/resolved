@@ -5,3 +5,11 @@
   <input type="url" name="url" id="url" required value="<%= @locals[:url] %>">
   <button>Submit</button>
 </form>
+<% if @locals[:name_servers] %>
+  <p>Name Servers:</p>
+  <ul>
+    <% @locals[:name_servers].each do |name_server| %>
+      <li><%= name_server.name.to_s %></li>
+    <% end %>
+  </ul>
+<% end %>

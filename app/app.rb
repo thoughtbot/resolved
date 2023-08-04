@@ -1,5 +1,7 @@
 require "bundler"
 require "erb"
+require "resolv"
+require "uri"
 
 Bundler.require(:default, ENV.fetch("RACK_ENV").to_sym)
 
@@ -10,7 +12,13 @@ class App
 
     case path
     when "/"
-      render("home", url: req.params["url"])
+      url = req.params["url"]
+
+      if url
+        render("home", url:, name_servers: name_servers_for(url))
+      else
+        render("home")
+      end
     else
       handle_missing_path
     end
@@ -38,5 +46,11 @@ class App
     headers = {"Content-Type" => "text/html; charset=utf-8"}
 
     [404, headers, [body]]
+  end
+
+  def name_servers_for(url)
+    host = URI(url).host
+    res = Resolv::DNS.new
+    res.getresources(host, Resolv::DNS::Resource::IN::NS)
   end
 end

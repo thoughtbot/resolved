@@ -15,11 +15,20 @@ feature "App" do
   end
 
   scenario "Filling out form" do
+    resolver = instance_double(Resolv::DNS)
+    ns_resource = instance_double(Resolv::DNS::Resource::IN::NS)
+    allow(Resolv::DNS).to receive(:new).and_return(resolver)
+    allow(resolver).to receive(:getresources).and_return([ns_resource])
+    allow(ns_resource).to receive(:name).and_return("expected-server.net")
+
     visit "/"
 
     fill_in :url, with: "https://example.com"
     click_button "Submit"
 
     expect(page).to have_field("url", with: "https://example.com")
+    within("ul") do
+      expect(page).to have_selector("li", text: "expected-server.net")
+    end
   end
 end
