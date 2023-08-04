@@ -56,5 +56,18 @@ RSpec.describe App, type: :request do
       expect(last_response.status).to eq 200
       expect(last_response.headers["Content-Type"]).to eq "text/html; charset=utf-8"
     end
+
+    context "when there are no results" do
+      it "returns a 422 status" do
+        resolver = instance_double(Resolv::DNS)
+        allow(Resolv::DNS).to receive(:new).and_return(resolver)
+        allow(resolver).to receive(:getresources).and_return([])
+
+        get "/?url=https://no-name-servers.com"
+
+        expect(last_response.status).to eq 422
+        expect(last_response.body).to match "Could not resolve DNS records for no-name-servers.com"
+      end
+    end
   end
 end

@@ -15,7 +15,13 @@ class App
       url = req.params["url"]
 
       if url
-        render("home", url:, name_servers: name_servers_for(url))
+        result = name_servers_for(url)
+
+        if result.success
+          render("home", url:, name_servers: result.payload)
+        else
+          render("home", url:, announcement: result.error, status_code: 422)
+        end
       else
         render("home")
       end
@@ -26,8 +32,9 @@ class App
 
   private
 
-  def render(template, status_code: 200, **locals)
+  def render(template, status_code: 200, announcement: nil, **locals)
     @locals = locals
+    @announcement = announcement
     @content = render_template(template)
     body = render_template("layout")
     headers = {"Content-Type" => "text/html; charset=utf-8"}
@@ -49,8 +56,17 @@ class App
   end
 
   def name_servers_for(url)
-    host = URI(url).host
-    res = Resolv::DNS.new
-    res.getresources(host, Resolv::DNS::Resource::IN::NS)
+    result = Struct.new(:success, :payload, :error, keyword_init: true)
+
+    begin
+      host = URI(url).host
+      res = Resolv::DNS.new
+      payload = res.getresources(host, Resolv::DNS::Resource::IN::NS)
+      raise Resolv::ResolvError, "Could not resolve DNS records for #{host}" if payload.empty?
+
+      result.new(success: true, payload: payload)
+    rescue Resolv::ResolvError, URI::InvalidURIError => error
+      result.new(success: false, error: error.message)
+    end
   end
 end

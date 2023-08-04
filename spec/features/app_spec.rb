@@ -31,4 +31,21 @@ feature "App" do
       expect(page).to have_selector("li", text: "expected-server.net")
     end
   end
+
+  scenario "Handling errors" do
+    error = Resolv::ResolvError.new("expected error")
+    allow(Resolv::DNS).to receive(:new).and_raise(error)
+
+    visit "/"
+
+    fill_in :url, with: "https://example.com"
+    click_button "Submit"
+
+    expect(page).to have_content "expected error"
+    expect(page).to have_field("url", with: "https://example.com")
+
+    visit current_path
+
+    expect(page).to_not have_content "expect error"
+  end
 end
