@@ -70,4 +70,12 @@ RSpec.describe App, type: :request do
       end
     end
   end
+
+  describe "/styles.css" do
+    it "is cached" do
+      get "/css/styles.css"
+
+      expect(last_response.headers["Cache-Control"]).to eq "public, max-age=31556952"
+    end
+  end
 end

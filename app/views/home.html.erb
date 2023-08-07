@@ -1,15 +1,25 @@
-<h1>Resolved</h1>
-<p>Enter a domain name</p>
-<form method="get" action="/">
-  <label for="url">Url</label>
-  <input type="url" name="url" id="url" required value="<%= @locals[:url] %>">
-  <button>Submit</button>
+<h1 class="text-center">Resolved</h1>
+<p class="text-center">Enter a domain name</p>
+<form method="get" action="/" class="row row-cols-sm-auto g-3 align-items-center justify-content-center mb-5">
+  <div class="col-12">
+    <div class="d-flex">
+      <label for="url" class="visually-hidden">Url</label>
+      <input type="url" name="url" id="url" placeholder="URL" required value="<%= @locals[:url] %>" class="form-control">
+    </div>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary">Submit</button>
+  </div>
 </form>
 <% if @locals[:name_servers] %>
-  <p>Name Servers:</p>
-  <ul>
-    <% @locals[:name_servers].each do |name_server| %>
-      <li><%= name_server.name.to_s %></li>
-    <% end %>
-  </ul>
+  <p class="text-center">Name Servers:</p>
+  <div class="row justify-content-center">
+    <div class="col-lg-3">
+      <ul class="list-group list-group-flush text-center">
+        <% @locals[:name_servers].each do |name_server| %>
+          <li class="list-group-item"><%= name_server.name.to_s %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
 <% end %>
