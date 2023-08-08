@@ -13,6 +13,12 @@ RSpec.describe App, type: :request do
 
       expect(last_response.status).to eq 200
     end
+
+    it "is compressed" do
+      get "/", {}, {"HTTP_ACCEPT_ENCODING" => "gzip"}
+
+      expect(last_response.headers["Content-Encoding"]).to eq "gzip"
+    end
   end
 
   describe "invalid paths" do
@@ -76,6 +82,12 @@ RSpec.describe App, type: :request do
       get "/css/styles.css"
 
       expect(last_response.headers["Cache-Control"]).to eq "public, max-age=31556952"
+    end
+
+    it "is compressed" do
+      get "/css/styles.css", {}, {"HTTP_ACCEPT_ENCODING" => "gzip"}
+
+      expect(last_response.headers["Content-Encoding"]).to eq "gzip"
     end
   end
 end
