@@ -33,4 +33,14 @@ RSpec.describe App, type: :integration do
       expect(last_response.status).to eq 200
     end
   end
+
+  describe "error handling" do
+    it "logs the error" do
+      allow(Resolv::DNS).to receive(:new).and_raise(StandardError, "expected error")
+
+      expect {
+        get "/?url=https://example.com"
+      }.to output("expected error\n").to_stdout
+    end
+  end
 end

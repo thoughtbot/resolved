@@ -63,6 +63,18 @@ RSpec.describe App, type: :request do
       expect(last_response.headers["Content-Type"]).to eq "text/html; charset=utf-8"
     end
 
+    context "when the server throws an error" do
+      it "returns a 500 status" do
+        allow(Resolv::DNS).to receive(:new).and_raise("some error")
+
+        get "/?url=https://example.com"
+
+        expect(last_response.status).to eq 500
+        expect(last_response.headers["Content-Type"]).to eq "text/html; charset=utf-8"
+        expect(last_response.body).to match "Something went wrong."
+      end
+    end
+
     context "when there are no results" do
       it "returns a 422 status" do
         resolver = instance_double(Resolv::DNS)
