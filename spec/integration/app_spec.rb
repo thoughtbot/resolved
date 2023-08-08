@@ -16,16 +16,15 @@ RSpec.describe App, type: :integration do
       allow(resolver).to receive(:getresources).and_return([ns_resource_two, ns_resource_one])
       allow(ns_resource_one).to receive(:name).and_return("1.net")
       allow(ns_resource_two).to receive(:name).and_return("2.net")
-      allow(Digest::MD5).to receive(:hexdigest).and_return("hash")
 
       get "/?url=https://example.com"
+      etag = last_response.headers["ETag"]
 
       expect(last_response.headers["If-None-Match"]).to be nil
-      expect(last_response.headers["ETag"]).to eq %("hash")
-      expect(last_response.headers["Cache-Control"]).to eq "public, no-cache"
-      expect(Digest::MD5).to have_received(:hexdigest).with("1.net2.net")
+      expect(etag).to_not be nil
+      expect(last_response.headers["Cache-Control"]).to eq "max-age=0, private, must-revalidate"
 
-      get "/?url=https://example.com", {}, {"HTTP_IF_NONE_MATCH" => %("hash")}
+      get "/?url=https://example.com", {}, {"HTTP_IF_NONE_MATCH" => etag}
 
       expect(last_response.status).to eq 304
 

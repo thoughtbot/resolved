@@ -2,6 +2,8 @@ require_relative "app/app"
 
 app = Rack::Builder.new do
   use Rack::Deflater
+  use Rack::ConditionalGet
+  use Rack::ETag
   use Rack::Static,
     root: "public",
     urls: ["/css", "/favicon.ico", "/404.html"],
