@@ -1,4 +1,5 @@
 require "bundler"
+require "digest"
 require "erb"
 require "resolv"
 require "uri"
@@ -18,7 +19,16 @@ class App
         result = name_servers_for(url)
 
         if result.success
-          render("home", url:, name_servers: result.payload)
+          etag = set_etag(result)
+
+          if stale?(req, etag)
+            render("home", url:, name_servers: result.payload, headers: {
+              "Cache-Control" => "public, no-cache",
+              "ETag" => etag
+            })
+          else
+            [304, {}, []]
+          end
         else
           render("home", url:, announcement: result.error, status_code: 422)
         end
@@ -32,12 +42,12 @@ class App
 
   private
 
-  def render(template, status_code: 200, announcement: nil, **locals)
+  def render(template, status_code: 200, announcement: nil, headers: {}, **locals)
     @locals = locals
     @announcement = announcement
     @content = render_template(template)
     body = render_template("layout")
-    headers = {"Content-Type" => "text/html; charset=utf-8"}
+    headers = {"Content-Type" => "text/html; charset=utf-8"}.merge(headers)
 
     [status_code, headers, [body]]
   end
@@ -68,5 +78,14 @@ class App
     rescue Resolv::ResolvError, URI::InvalidURIError => error
       result.new(success: false, error: error.message)
     end
+  end
+
+  def stale?(req, etag)
+    req.env["HTTP_IF_NONE_MATCH"] != etag
+  end
+
+  def set_etag(result)
+    name_servers = result.payload.map(&:name).map(&:to_s).sort.join
+    %("#{Digest::MD5.hexdigest(name_servers)}")
   end
 end
