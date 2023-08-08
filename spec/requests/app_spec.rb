@@ -65,7 +65,7 @@ RSpec.describe App, type: :request do
 
     context "when the server throws an error" do
       it "returns a 500 status" do
-        allow(Resolv::DNS).to receive(:new).and_raise("some error")
+        allow(Resolv::DNS).to receive(:new).and_raise(StandardError, "some error")
 
         get "/?url=https://example.com"
 

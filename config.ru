@@ -1,6 +1,10 @@
 require_relative "app/app"
+require_relative "lib/exception_handler"
 
 app = Rack::Builder.new do
+  use Rack::Logger
+  use Rack::ShowExceptions
+  use ExceptionHandler
   use Rack::Deflater
   use Rack::ConditionalGet
   use Rack::ETag

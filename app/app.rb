@@ -10,30 +10,23 @@ class App
     req = Rack::Request.new(env)
     path = req.path_info
 
-    begin
-      case path
-      when "/"
-        url = req.params["url"]
+    case path
+    when "/"
+      url = req.params["url"]
 
-        if url
-          result = name_servers_for(url)
+      if url
+        result = name_servers_for(url)
 
-          if result.success
-            render("home", url:, name_servers: result.payload)
-          else
-            render("home", url:, announcement: result.error, status_code: 422)
-          end
+        if result.success
+          render("home", url:, name_servers: result.payload)
         else
-          render("home")
+          render("home", url:, announcement: result.error, status_code: 422)
         end
       else
-        handle_missing_path
+        render("home")
       end
-    rescue => error
-      puts error
-      body = File.read("./public/500.html")
-
-      [500, {"Content-Type" => "text/html; charset=utf-8"}, [body]]
+    else
+      handle_missing_path
     end
   end
 
