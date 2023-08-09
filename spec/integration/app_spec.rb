@@ -43,4 +43,14 @@ RSpec.describe App, type: :integration do
       expect(last_response.errors).to match "expected error"
     end
   end
+
+  describe "logging requests" do
+    it "logs requests" do
+      allow(Rack::Utils).to receive(:clock_time).and_return(0)
+
+      get "/?url=https://example.com"
+
+      expect(last_response.errors).to match(/{:method=>"GET", :path=>"\/", :status=>200, :query_hash=>{"url"=>"https:\/\/example.com"}, :request_time=>"0s"}/)
+    end
+  end
 end
