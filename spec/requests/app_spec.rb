@@ -102,4 +102,38 @@ RSpec.describe App, type: :request do
       expect(last_response.headers["Content-Encoding"]).to eq "gzip"
     end
   end
+
+  describe "invalid methods" do
+    it "returns a 405 status" do
+      post "/"
+
+      expect(last_response.status).to eq 405
+    end
+
+    it "returns the correct content type" do
+      post "/"
+
+      expect(last_response.headers["Content-Type"]).to eq "text/html; charset=utf-8"
+    end
+
+    it "returns the correct response" do
+      post "/"
+
+      expect(last_response.body).to match "Method not allowed"
+    end
+  end
+
+  describe "/405.html" do
+    it "returns a 200 status" do
+      get "/405.html"
+
+      expect(last_response.status).to eq 200
+    end
+
+    it "returns an html content type" do
+      get "/405.html"
+
+      expect(last_response.headers["Content-Type"]).to eq "text/html; charset=utf-8"
+    end
+  end
 end
