@@ -53,4 +53,17 @@ RSpec.describe App, type: :integration do
       expect(last_response.errors).to match(/{:method=>"GET", :path=>"\/", :status=>200, :query_hash=>{"url"=>"https:\/\/example.com"}, :request_time=>"0s"}/)
     end
   end
+
+  describe "HTTP security" do
+    it "sets the appropriate headers" do
+      get "/"
+
+      expect(last_response.headers).to include(
+        "Strict-Transport-Security" => "max-age=63072000; includeSubDomains; preload",
+        "X-Content-Type-Options" => "nosniff",
+        "X-Frame-Options" => "SAMEORIGIN",
+        "Referrer-Policy" => "strict-origin-when-cross-origin"
+      )
+    end
+  end
 end

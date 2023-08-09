@@ -6,6 +6,14 @@ require "uri"
 Bundler.require(:default, ENV.fetch("RACK_ENV").to_sym)
 
 class App
+  HEADERS = {
+    "Content-Type" => "text/html; charset=utf-8",
+    "Strict-Transport-Security" => "max-age=63072000; includeSubDomains; preload",
+    "X-Content-Type-Options" => "nosniff",
+    "X-Frame-Options" => "SAMEORIGIN",
+    "Referrer-Policy" => "strict-origin-when-cross-origin"
+  }.freeze
+
   def call(env)
     req = Rack::Request.new(env)
     path = req.path_info
@@ -37,7 +45,7 @@ class App
     @announcement = announcement
     @content = render_template(template)
     body = render_template("layout")
-    headers = {"Content-Type" => "text/html; charset=utf-8"}.merge(headers)
+    headers = HEADERS.merge(headers)
 
     [status_code, headers, [body]]
   end
