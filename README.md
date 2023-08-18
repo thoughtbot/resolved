@@ -35,5 +35,35 @@ bin/dev
 bundle exec rake
 ```
 
+## Contributing
+
+See the [CONTRIBUTING] document.
+Thank you, [contributors]!
+
+  [CONTRIBUTING]: CONTRIBUTING.md
+  [contributors]: https://github.com/thoughtbot/resolved/graphs/contributors
+
+## License
+
+Resolved is Copyright (c) thoughtbot, inc.
+It is free software, and may be redistributed
+under the terms specified in the [LICENSE] file.
+
+  [LICENSE]: LICENSE
+
+## About
+
+![thoughtbot](https://thoughtbot.com/brand_assets/93:44.svg)
+
+Resolved is maintained and funded by thoughtbot, inc.
+The names and logos for thoughtbot are trademarks of thoughtbot, inc.
+
+We love open source software!
+See [our other projects][community]
+or [hire us][hire] to help build your product.
+
+  [community]: https://thoughtbot.com/community?utm_source=github
+  [hire]: https://thoughtbot.com/hire-us?utm_source=github
+
 [1]: https://resolved-9623c76e6dbd.herokuapp.com
 [2]: https://github.com/thoughtbot/resolved/commits/main
