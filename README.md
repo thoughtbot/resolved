@@ -51,19 +51,8 @@ under the terms specified in the [LICENSE] file.
 
   [LICENSE]: LICENSE
 
-## About
-
-![thoughtbot](https://thoughtbot.com/brand_assets/93:44.svg)
-
-Resolved is maintained and funded by thoughtbot, inc.
-The names and logos for thoughtbot are trademarks of thoughtbot, inc.
-
-We love open source software!
-See [our other projects][community]
-or [hire us][hire] to help build your product.
-
-  [community]: https://thoughtbot.com/community?utm_source=github
-  [hire]: https://thoughtbot.com/hire-us?utm_source=github
+<!-- START /templates/footer.md -->
+<!-- END /templates/footer.md -->
 
 [1]: https://resolved-9623c76e6dbd.herokuapp.com
 [2]: https://github.com/thoughtbot/resolved/commits/main
